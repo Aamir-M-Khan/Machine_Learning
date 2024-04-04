@@ -2,7 +2,7 @@ import numpy as np
 
 
 class NaiveBayes:
-    def __init__(Self, X, y):
+    def __init__(self, X, y):
         """NaiveBayes constructor
 
         X: (number of training examples, number of features)
@@ -35,9 +35,9 @@ class NaiveBayes:
             prob_c = self.density_function(
                 X, self.classes_mean[str(c)], self.classes_variance[str(c)]
             )
-            probs[:, c] = probs_c + np.log(prior)
+            prob[:, c] = prob_c + np.log(prior)
 
-            return np.argmax(probs, 1)
+            return np.argmax(prob, 1)
 
     def density_function(self, x, mean, sigma):
         # Calculate probability from Gaussian density density_function
