@@ -1,35 +1,28 @@
 import numpy as np
 
-
 class SVM:
-
     def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
-        self.lr = learning_rate
+        self.learning_rate = learning_rate
         self.lambda_param = lambda_param
         self.n_iters = n_iters
-        self.w = None
-        self.b = None
-
+        self.weights = None
+        self.bias = None
 
     def fit(self, X, y):
         n_samples, n_features = X.shape
-
-        y_ = np.where(y <= 0, -1, 1)
-
-        self.w = np.zeros(n_features)
-        self.b = 0
+        y_transformed = np.where(y <= 0, -1, 1)
+        self.weights = np.zeros(n_features)
+        self.bias = 0
 
         for _ in range(self.n_iters):
             for idx, x_i in enumerate(X):
-                condition = y_[idx] * (np.dot(x_i, self.w) - self.b) >= 1
-
+                condition = y_transformed[idx] * (np.dot(x_i, self.weights) - self.bias) >= 1
                 if condition:
-                    self.w -= self.lr * (2*self.lambda_param * self.w)
+                    self.weights -= self.learning_rate * (2 * self.lambda_param * self.weights)
                 else:
-                    self.w -= self.lr * (2 * self.lambda_param * self.w - np.dot(x_i, y_[idx]))
-                    self.b -= self.lr * y_[idx]
-
+                    self.weights -= self.learning_rate * (2 * self.lambda_param * self.weights - np.dot(x_i, y_transformed[idx]))
+                    self.bias -= self.learning_rate * y_transformed[idx]
 
     def predict(self, X):
-        approx = np.dot(X, self.w) - self.b
-        return np.sign(approx)
+        linear_output = np.dot(X, self.weights) - self.bias
+        return np.sign(linear_output)
